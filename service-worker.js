@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     let playerCards = [];
     let dealerCards = [];
+    let gameStarted = false;
+    let playerTurn = false;
   
+    // HTML elementi
     const playerCard1 = document.getElementById('player-card1');
     const playerCard2 = document.getElementById('player-card2');
     const dealerCard1 = document.getElementById('dealer-card1');
@@ -12,71 +15,82 @@ document.addEventListener('DOMContentLoaded', () => {
     const hitStandDiv = document.getElementById('hit-stand');
     const playerHandDiv = document.getElementById('player-hand');
   
-    let playerTurn = false;
-    let gameStarted = false;
+    const disableInput = (input) => input.disabled = true;
+    const enableInput = (input) => input.disabled = false;
   
-    const disableInput = (input) => {
-      input.disabled = true;
-    }
+    // Funkcija za validaciju i automatski prebacivanje
+    const handlePlayerCardInput = (cardInput, nextCardInput) => {
+      cardInput.addEventListener('input', () => {
+        let value = parseInt(cardInput.value);
   
-    const enableInput = (input) => {
-      input.disabled = false;
-    }
+        if (value > 11) {
+          cardInput.value = 11; // Postavljanje na maksimalni broj 11
+        }
   
-    const updatePlayerHand = (cardValue) => {
-      playerCards.push(cardValue);
-      if (playerCards.length >= 2) {
-        enableInput(dealerCard1);
-        playerCard3.disabled = false;
-      }
-    }
+        if (value === 11) {
+          nextCardInput.focus(); // Fokusiraj sledeći input
+        }
+      });
+    };
   
-    const checkBust = () => {
-      const playerTotal = playerCards.reduce((acc, card) => acc + card, 0);
-      if (playerTotal > 21) {
-        alert('Player Busted!');
-        return true;
-      }
-      return false;
-    }
-  
-    // Function to handle the 'Deal' button
+    // Funkcija za 'Deal' dugme
     dealButton.addEventListener('click', () => {
+      // Osiguraj da su oba broja uneta
       if (playerCard1.value && playerCard2.value) {
         playerCards = [parseInt(playerCard1.value), parseInt(playerCard2.value)];
         dealerCards = [parseInt(dealerCard1.value)];
         hitStandDiv.style.display = 'block';
+        playerHandDiv.style.display = 'block';
         gameStarted = true;
+  
+        // Onemogući unos na prvi karticu igrača i omogućiti unos na drugi
+        disableInput(playerCard1);
+        enableInput(playerCard2);
+        handlePlayerCardInput(playerCard2, playerCard3);
       }
     });
   
+    // Funkcija za 'Hit' dugme
     hitButton.addEventListener('click', () => {
-      playerCard3.disabled = false;
-      if (playerCard3.value) {
-        updatePlayerHand(parseInt(playerCard3.value));
+      if (playerTurn && playerCard3.value) {
+        playerCards.push(parseInt(playerCard3.value));
         checkBust();
       }
     });
   
+    // Funkcija za 'Stand' dugme
     standButton.addEventListener('click', () => {
       alert('Player chose to stand!');
-      // Now prompt for dealer's hand and calculate the winner
+      dealerPlay();
+    });
+  
+    // Funkcija za validaciju da li je igrač "Busted"
+    const checkBust = () => {
+      const playerTotal = playerCards.reduce((acc, card) => acc + card, 0);
+      if (playerTotal > 21) {
+        alert('Player Busted!');
+      }
+    };
+  
+    // Funkcija za igru dilera
+    const dealerPlay = () => {
       let dealerTotal = dealerCards.reduce((acc, card) => acc + card, 0);
       while (dealerTotal < 17) {
         let newCard = prompt("Dealer needs to hit! Enter card (1-11):");
         dealerCards.push(parseInt(newCard));
         dealerTotal = dealerCards.reduce((acc, card) => acc + card, 0);
       }
-      // Show the final result
+  
       if (dealerTotal > 21) {
         alert('Dealer Busted! Player Wins!');
       } else {
-        if (dealerTotal > playerCards.reduce((acc, card) => acc + card, 0)) {
+        const playerTotal = playerCards.reduce((acc, card) => acc + card, 0);
+        if (dealerTotal > playerTotal) {
           alert('Dealer Wins!');
         } else {
           alert('Player Wins!');
         }
       }
-    });
+    };
   });
   

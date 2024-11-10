@@ -9,6 +9,7 @@
 <body>
   <h1>Blackjack Game</h1>
 
+  <!-- Player Card Inputs -->
   <div id="player-cards">
     <label for="player-card1">Player Card 1: </label>
     <input type="number" id="player-card1" min="1" max="11" />
@@ -16,9 +17,10 @@
     <input type="number" id="player-card2" min="1" max="11" />
   </div>
 
+  <!-- Dealer Card Inputs -->
   <div id="dealer-cards">
     <label for="dealer-card1">Dealer Card 1: </label>
-    <input type="number" id="dealer-card1" min="1" max="11" />
+    <input type="number" id="dealer-card1" min="1" max="11" disabled />
   </div>
 
   <button id="deal-button">Deal</button>
@@ -30,7 +32,7 @@
 
   <div id="player-hand" style="display:none;">
     <label for="player-card3">Player Card 3: </label>
-    <input type="number" id="player-card3" min="1" max="11" />
+    <input type="number" id="player-card3" min="1" max="11" disabled />
   </div>
 
   <script src="app.js"></script>
