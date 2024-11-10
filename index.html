@@ -2,26 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackjack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Blackjack Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Blackjack Game</h1>
-        
-        <div class="game-section">
-            <h2>Player's Hand: <span id="player-hand"></span> Total: <span id="player-total"></span></h2>
-            <input type="text" id="player-cards" placeholder="Enter two cards for player" />
-            <br>
-            <h2>Dealer's Hand: <span id="dealer-hand"></span> Total: <span id="dealer-total"></span></h2>
-            <input type="text" id="dealer-cards" placeholder="Enter two cards for dealer" />
-            <br>
-            <button id="deal-button">Deal</button>
-            <button id="hit-button">Hit</button>
-            <button id="stand-button">Stand</button>
-            <div id="result"></div>
+    <div class="game-container">
+        <h1>Blackjack</h1>
+        <div class="inputs">
+            <label for="player-cards">Enter 2 Player Cards (separate with commas):</label>
+            <input type="text" id="player-cards" placeholder="Enter player cards" oninput="autoMoveToDealer()">
         </div>
+        <div class="inputs">
+            <label for="dealer-cards">Enter 2 Dealer Cards (separate with commas):</label>
+            <input type="text" id="dealer-cards" placeholder="Enter dealer cards" oninput="autoMoveToNext()">
+        </div>
+        <button id="deal-button" onclick="dealGame()">Deal</button>
+        <div id="game-status"></div>
+        <div id="result"></div>
     </div>
 
     <script src="app.js"></script>

@@ -1,106 +1,98 @@
 let playerCards = [];
 let dealerCards = [];
-let playerScore = 0;
-let dealerScore = 0;
-let gameOver = false;
+let isGameStarted = false;
 
-// Funkcija koja računa sumu kartica
-function calculateScore(cards) {
-    let score = 0;
-    let aces = 0;
-    cards.forEach(card => {
-        if (card === 1) {
-            score += 11;
-            aces++;
-        } else if (card > 10) {
-            score += 10;
-        } else {
-            score += card;
-        }
-    });
-
-    // Ako je ukupan broj kartica više od 21 i ima As, smanjite As sa 11 na 1
-    while (score > 21 && aces > 0) {
-        score -= 10;
-        aces--;
+// Funkcija koja automatski prebacuje fokus na input za dilera nakon što unesete karte za igrača
+function autoMoveToDealer() {
+    const playerInput = document.getElementById("player-cards").value;
+    if (playerInput.split(',').length >= 2) {
+        document.getElementById("dealer-cards").focus();
     }
-
-    return score;
 }
 
-// Prikazivanje rezultata na ekranu
-function updateGame() {
-    document.getElementById('player-cards-text').textContent = playerCards.join(", ");
-    document.getElementById('dealer-cards-text').textContent = dealerCards.join(", ");
-    document.getElementById('player-score-text').textContent = playerScore;
-    document.getElementById('dealer-score-text').textContent = dealerScore;
-}
-
-// Da li je igrač izgubio ili pobedio
-function checkGameOver() {
-    if (playerScore > 21) {
-        gameOver = true;
-        document.getElementById('game-message').textContent = "Player busted! You lost.";
-    } else if (dealerScore > 21) {
-        gameOver = true;
-        document.getElementById('game-message').textContent = "Dealer busted! You win!";
-    } else if (dealerScore >= 17) {
-        if (playerScore > dealerScore) {
-            gameOver = true;
-            document.getElementById('game-message').textContent = "You win!";
-        } else if (playerScore < dealerScore) {
-            gameOver = true;
-            document.getElementById('game-message').textContent = "You lose!";
-        } else {
-            gameOver = true;
-            document.getElementById('game-message').textContent = "It's a tie!";
-        }
+// Funkcija koja prebacuje na sledeći unos
+function autoMoveToNext() {
+    const dealerInput = document.getElementById("dealer-cards").value;
+    if (dealerInput.split(',').length >= 2) {
+        document.getElementById("deal-button").focus();
     }
 }
 
 // Funkcija koja pokreće igru
-document.getElementById('deal-cards').addEventListener('click', () => {
-    const playerCard1 = parseInt(document.getElementById('player-card-1').value);
-    const playerCard2 = parseInt(document.getElementById('player-card-2').value);
+function dealGame() {
+    const playerInput = document.getElementById("player-cards").value;
+    const dealerInput = document.getElementById("dealer-cards").value;
 
-    if (isNaN(playerCard1) || isNaN(playerCard2)) {
-        alert("Please enter valid card values.");
-        return;
+    playerCards = playerInput.split(',').map(Number);
+    dealerCards = dealerInput.split(',').map(Number);
+
+    if (playerCards.length === 2 && dealerCards.length === 2) {
+        isGameStarted = true;
+        document.getElementById("game-status").innerHTML = "Game started! Did the player Hit or Stand?";
+        document.getElementById("deal-button").style.display = "none";
+        createHitOrStandButtons();
+    } else {
+        alert("Please enter 2 cards for both player and dealer.");
+    }
+}
+
+// Funkcija za prikaz Hit/Stand dugmadi
+function createHitOrStandButtons() {
+    const hitButton = document.createElement("button");
+    hitButton.innerHTML = "Hit";
+    hitButton.onclick = hitPlayer;
+    document.body.appendChild(hitButton);
+
+    const standButton = document.createElement("button");
+    standButton.innerHTML = "Stand";
+    standButton.onclick = standPlayer;
+    document.body.appendChild(standButton);
+}
+
+// Funkcija za "Hit" igrača
+function hitPlayer() {
+    const card = prompt("Enter the card number (1-11):");
+    if (card) {
+        playerCards.push(Number(card));
+        checkPlayerStatus();
+    }
+}
+
+// Funkcija za "Stand" igrača
+function standPlayer() {
+    dealerTurn();
+}
+
+// Funkcija za proveru statusa igrača
+function checkPlayerStatus() {
+    const playerTotal = playerCards.reduce((acc, card) => acc + card, 0);
+    if (playerTotal > 21) {
+        document.getElementById("result").innerHTML = "Player Busted! Dealer Wins!";
+        isGameStarted = false;
+    } else {
+        document.getElementById("game-status").innerHTML = "Did the player Hit or Stand?";
+    }
+}
+
+// Funkcija za dealerov potez
+function dealerTurn() {
+    let dealerTotal = dealerCards.reduce((acc, card) => acc + card, 0);
+
+    while (dealerTotal < 17) {
+        const newCard = Math.floor(Math.random() * 11) + 1;  // Simulacija nasumičnog izvlačenja karte
+        dealerCards.push(newCard);
+        dealerTotal = dealerCards.reduce((acc, card) => acc + card, 0);
     }
 
-    playerCards = [playerCard1, playerCard2];
-    playerScore = calculateScore(playerCards);
+    const playerTotal = playerCards.reduce((acc, card) => acc + card, 0);
 
-    dealerCards = [Math.floor(Math.random() * 10) + 1, Math.floor(Math.random() * 10) + 1];
-    dealerScore = calculateScore(dealerCards);
-
-    updateGame();
-
-    document.getElementById('hit-btn').disabled = false;
-    document.getElementById('stand-btn').disabled = false;
-});
-
-// Funkcija za "Hit" opciju
-document.getElementById('hit-btn').addEventListener('click', () => {
-    if (gameOver) return;
-
-    let newCard = Math.floor(Math.random() * 10) + 1;
-    playerCards.push(newCard);
-    playerScore = calculateScore(playerCards);
-
-    updateGame();
-    checkGameOver();
-});
-
-// Funkcija za "Stand" opciju
-document.getElementById('stand-btn').addEventListener('click', () => {
-    if (gameOver) return;
-
-    while (dealerScore < 17) {
-        dealerCards.push(Math.floor(Math.random() * 10) + 1);
-        dealerScore = calculateScore(dealerCards);
+    if (dealerTotal > 21) {
+        document.getElementById("result").innerHTML = "Dealer Busted! Player Wins!";
+    } else if (dealerTotal > playerTotal) {
+        document.getElementById("result").innerHTML = "Dealer Wins!";
+    } else if (dealerTotal < playerTotal) {
+        document.getElementById("result").innerHTML = "Player Wins!";
+    } else {
+        document.getElementById("result").innerHTML = "It's a tie!";
     }
-
-    updateGame();
-    checkGameOver();
-});
+}
