@@ -1,110 +1,65 @@
-let playerHand = [];
-let dealerHand = [];
-
-const cardValues = {
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
-    7: 7,
-    8: 8,
-    9: 9,
-    10: 10,
-    11: 10, // Jack
-    12: 10, // Queen
-    13: 10, // King
-    14: 11 // Ace
-};
-
-const dealButton = document.getElementById("deal-button");
-const hitButton = document.getElementById("hit-button");
-const standButton = document.getElementById("stand-button");
-const playerCardsInput = document.getElementById("player-cards");
-const dealerCardsInput = document.getElementById("dealer-cards");
-const resultDiv = document.getElementById("result");
-
-dealButton.addEventListener("click", dealCards);
-hitButton.addEventListener("click", hit);
-standButton.addEventListener("click", stand);
-
-function dealCards() {
-    const playerCards = playerCardsInput.value.split(" ").map(Number);
-    const dealerCards = dealerCardsInput.value.split(" ").map(Number);
-
-    if (playerCards.length !== 2 || dealerCards.length !== 2) {
-        resultDiv.innerText = "Please enter two cards for both player and dealer.";
+document.getElementById('deal-button').addEventListener('click', function () {
+    let playerCard1 = parseInt(document.getElementById('player-card1').value);
+    let playerCard2 = parseInt(document.getElementById('player-card2').value);
+    
+    // Provera validnosti unosa
+    if (![playerCard1, playerCard2].every(card => card >= 1 && card <= 11)) {
+      alert('Please enter valid numbers between 1 and 11 for each card.');
+      return;
+    }
+  
+    // Prikazivanje sekcije za dealerove karte
+    document.getElementById('dealer-cards').style.display = 'block';
+    document.getElementById('deal-button').style.display = 'none';
+    
+    // Enable "Hit" and "Stand" buttons
+    document.getElementById('action-container').style.display = 'block';
+  
+    // Funkcija za "Hit"
+    document.getElementById('player-hit').addEventListener('click', function () {
+      let playerHitCard = parseInt(prompt('Enter a new card for player (1-11):'));
+      if (playerHitCard < 1 || playerHitCard > 11) {
+        alert('Invalid card value. Please enter a valid card.');
         return;
-    }
-
-    playerHand = playerCards;
-    dealerHand = dealerCards;
-
-    updateUI();
-}
-
-function hit() {
-    const newCard = parseInt(prompt("Enter card value for Player"));
-    playerHand.push(newCard);
-    updateUI();
-
-    if (getTotal(playerHand) > 21) {
-        resultDiv.innerText = "Player Busted!";
-        hitButton.disabled = true;
-        standButton.disabled = true;
-    }
-}
-
-function stand() {
-    while (getTotal(dealerHand) < 17) {
-        const newCard = getRandomCard();
-        dealerHand.push(newCard);
-    }
-    updateUI();
-
-    const playerTotal = getTotal(playerHand);
-    const dealerTotal = getTotal(dealerHand);
-
-    if (dealerTotal > 21) {
-        resultDiv.innerText = "Dealer Busted! You Win!";
-    } else if (playerTotal > dealerTotal) {
-        resultDiv.innerText = "You Win!";
-    } else if (playerTotal < dealerTotal) {
-        resultDiv.innerText = "You Lost!";
-    } else {
-        resultDiv.innerText = "It's a Tie!";
-    }
-
-    hitButton.disabled = true;
-    standButton.disabled = true;
-}
-
-function getTotal(hand) {
-    let total = 0;
-    let aces = 0;
-
-    hand.forEach(card => {
-        total += cardValues[card];
-        if (card === 14) aces++;
+      }
+  
+      playerCard1 += playerHitCard; // Dodajemo novu kartu
+  
+      // Provera da li je player busta
+      if (playerCard1 > 21) {
+        document.getElementById('result').innerText = 'Player Busted!';
+        return;
+      }
+  
+      alert(`Player's new total: ${playerCard1}`);
     });
-
-    // Adjust for aces if total > 21
-    while (total > 21 && aces > 0) {
-        total -= 10;
-        aces--;
+  
+    // Funkcija za "Stand"
+    document.getElementById('player-stand').addEventListener('click', function () {
+      // Prikazivanje unosa za dealerov broj
+      document.getElementById('dealer-action').style.display = 'block';
+    });
+  });
+  
+  document.getElementById('submit-dealer-result').addEventListener('click', function () {
+    let playerCard1 = parseInt(document.getElementById('player-card1').value);
+    let dealerTotal = parseInt(document.getElementById('dealer-result').value);
+  
+    // Validacija dealerovog broja
+    if (dealerTotal < 1 || dealerTotal > 21) {
+      alert('Dealer total must be between 1 and 21');
+      return;
     }
-
-    return total;
-}
-
-function getRandomCard() {
-    const card = Math.floor(Math.random() * 13) + 2; // Random card between 2 and 14
-    return card;
-}
-
-function updateUI() {
-    document.getElementById("player-hand").innerText = playerHand.join(" ");
-    document.getElementById("dealer-hand").innerText = dealerHand.join(" ");
-    document.getElementById("player-total").innerText = getTotal(playerHand);
-    document.getElementById("dealer-total").innerText = getTotal(dealerHand);
-}
+  
+    // Provera ko je pobedio
+    if (dealerTotal > 21) {
+      document.getElementById('result').innerText = 'Dealer Busted! Player Wins!';
+    } else if (dealerTotal > playerCard1) {
+      document.getElementById('result').innerText = 'Dealer Wins!';
+    } else if (dealerTotal < playerCard1) {
+      document.getElementById('result').innerText = 'Player Wins!';
+    } else {
+      document.getElementById('result').innerText = 'It\'s a tie!';
+    }
+  });
+  

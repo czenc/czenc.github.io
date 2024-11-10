@@ -1,27 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Blackjack Game</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Blackjack Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <h1>Blackjack</h1>
-        <div class="inputs">
-            <label for="player-cards">Enter 2 Player Cards (separate with commas):</label>
-            <input type="text" id="player-cards" placeholder="Enter player cards" oninput="autoMoveToDealer()">
-        </div>
-        <div class="inputs">
-            <label for="dealer-cards">Enter 2 Dealer Cards (separate with commas):</label>
-            <input type="text" id="dealer-cards" placeholder="Enter dealer cards" oninput="autoMoveToNext()">
-        </div>
-        <button id="deal-button" onclick="dealGame()">Deal</button>
-        <div id="game-status"></div>
-        <div id="result"></div>
+  <div class="game-container">
+    <h1>Blackjack Game</h1>
+
+    <!-- Player Cards Input -->
+    <div>
+      <label for="player-cards">Player Cards (Enter two numbers, 1-11):</label>
+      <input type="number" id="player-card1" min="1" max="11" placeholder="Card 1" autofocus>
+      <input type="number" id="player-card2" min="1" max="11" placeholder="Card 2">
     </div>
 
-    <script src="app.js"></script>
+    <!-- Dealer Cards Input -->
+    <div id="dealer-cards" style="display:none;">
+      <label for="dealer-cards">Dealer Cards (Enter two numbers, 1-11):</label>
+      <input type="number" id="dealer-card1" min="1" max="11" placeholder="Card 1">
+      <input type="number" id="dealer-card2" min="1" max="11" placeholder="Card 2">
+    </div>
+
+    <!-- Action Buttons -->
+    <button id="deal-button">Deal</button>
+
+    <!-- Action After Deal -->
+    <div id="action-container" style="display:none;">
+      <label for="player-action">Did player Hit or Stand?</label>
+      <button id="player-hit">Hit</button>
+      <button id="player-stand">Stand</button>
+    </div>
+
+    <!-- Dealer's action after Stand -->
+    <div id="dealer-action" style="display:none;">
+      <label for="dealer-result">Enter Dealer's Total:</label>
+      <input type="number" id="dealer-result" min="1" max="21" placeholder="Dealer Total">
+      <button id="submit-dealer-result">Submit</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
