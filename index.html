@@ -1,38 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-  <title>Blackjack Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raspored</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Blackjack Game</h1>
+  <div class="container">
+    <h1>Raspored</h1>
 
-  <!-- Player Card Inputs -->
-  <div id="player-cards">
-    <label for="player-card1">Player Card 1: </label>
-    <input type="number" id="player-card1" min="1" max="11" />
-    <label for="player-card2">Player Card 2: </label>
-    <input type="number" id="player-card2" min="1" max="11" />
-  </div>
+    <div class="tabs">
+      <button id="ujutroTab" class="tab-button active" onclick="showTab('ujutro')">Ujutro</button>
+      <button id="popodneTab" class="tab-button" onclick="showTab('popodne')">Popodne</button>
+    </div>
 
-  <!-- Dealer Card Inputs -->
-  <div id="dealer-cards">
-    <label for="dealer-card1">Dealer Card 1: </label>
-    <input type="number" id="dealer-card1" min="1" max="11" disabled />
-  </div>
+    <!-- Raspored za "Ujutro" -->
+    <div id="ujutro" class="tab-content active">
+      <h2>Ponedjeljak - Petak</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sat</th>
+            <th>PON</th>
+            <th>UTO</th>
+            <th>SRI</th>
+            <th>ČET</th>
+            <th>PET</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. Sat (8:00 - 8:45)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Engleski jezik I<br>(48)</td>
+            <td>Tehničko crtanje<br>(3)</td>
+            <td>Tehnologija održavanja alatnih strojeva<br>(4)</td>
+          </tr>
+          <tr>
+            <td>2. Sat (8:50 - 9:35)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Engleski jezik I<br>(48)</td>
+            <td>Tehničko crtanje<br>(3)</td>
+            <td>Tehnologija obrade i montaže<br>(4)</td>
+          </tr>
+          <tr>
+            <td>3. Sat (9:40 - 10:25)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Tehnički materijali<br>(1)</td>
+            <td>Sat razrednika<br>(32)</td>
+            <td>Tjelesna i zdravstvena kultura</td>
+          </tr>
+          <tr>
+            <td>4. Sat (10:30 - 11:15)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Hrvatski jezik<br>(32)</td>
+            <td>Hrvatski jezik<br>(32)</td>
+            <td>Tjelesna i zdravstvena kultura</td>
+          </tr>
+          <tr>
+            <td>5. Sat (11:20 - 12:05)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Vjeronauk<br>(43)</td>
+            <td>Hrvatski jezik<br>(32)</td>
+            <td>Povijest<br>(56)</td>
+          </tr>
+          <tr>
+            <td>6. Sat (12:10 - 12:55)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Tehničko crtanje<br>(3)</td>
+            <td>Matematika<br>(45)</td>
+            <td>Povijest<br>(56)</td>
+          </tr>
+          <tr>
+            <td>7. Sat (13:00 - 13:45)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>-</td>
+            <td>Matematika<br>(45)</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <button id="deal-button">Deal</button>
-
-  <div id="hit-stand" style="display:none;">
-    <button id="hit-button">Hit</button>
-    <button id="stand-button">Stand</button>
-  </div>
-
-  <div id="player-hand" style="display:none;">
-    <label for="player-card3">Player Card 3: </label>
-    <input type="number" id="player-card3" min="1" max="11" disabled />
+    <!-- Raspored za "Popodne" -->
+    <div id="popodne" class="tab-content">
+      <h2>Ponedjeljak - Petak</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sat</th>
+            <th>PON</th>
+            <th>UTO</th>
+            <th>SRI</th>
+            <th>ČET</th>
+            <th>PET</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. Sat (13:00 - 13:45)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Hrvatski jezik<br>(32)</td>
+            <td>Tehnički materijali<br>(4)</td>
+            <td>Tehničko crtanje<br>(3)</td>
+          </tr>
+          <tr>
+            <td>2. Sat (13:50 - 14:35)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Hrvatski jezik<br>(32)</td>
+            <td>Povijest<br>(56)</td>
+            <td>Tehničko crtanje<br>(3)</td>
+          </tr>
+          <tr>
+            <td>3. Sat (14:40 - 15:25)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Matematika<br>(45)</td>
+            <td>Sat razrednika</td>
+            <td>Vjeronauk<br>(50)</td>
+          </tr>
+          <tr>
+            <td>4. Sat (15:30 - 16:15)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Engleski jezik I<br>(48)</td>
+            <td>Hrvatski jezik<br>(32)</td>
+            <td>Tjelesna i zdravstvena kultura</td>
+          </tr>
+          <tr>
+            <td>5. Sat (16:20 - 17:05)</td>
+            <td>Praktična nastava</td>
+            <td>Praktična nastava</td>
+            <td>Engleski jezik I<br>(48)</td>
+            <td>Osnove računalstva<br>(57)</td>
+            <td>Tehnologija održavanja alatnih strojeva<br>(55)</td>
+          </tr>
+          <tr>
+            <td>6. Sat (17:10 - 17:55)</td>
+            <td>-</td>
+            <td>-</td>
+            <td>Engleski jezik I<br>(48)</td>
+            <td>Osnove računalstva<br>(57)</td>
+            <td>Tehnologija obrade i montaže<br>(55)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script src="app.js"></script>
