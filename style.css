@@ -85,7 +85,7 @@ td {
 @media (max-width: 393px) {
   h1 {
     font-size: 2.5em; /* Manji font za ekran */
-    padding: 60px;
+    padding: 40px;
   }
   table {
     font-size: 0.65em; /* Još manji font */
