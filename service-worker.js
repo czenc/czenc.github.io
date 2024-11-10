@@ -1,65 +1,82 @@
-document.getElementById('deal-button').addEventListener('click', function () {
-    let playerCard1 = parseInt(document.getElementById('player-card1').value);
-    let playerCard2 = parseInt(document.getElementById('player-card2').value);
-    
-    // Provera validnosti unosa
-    if (![playerCard1, playerCard2].every(card => card >= 1 && card <= 11)) {
-      alert('Please enter valid numbers between 1 and 11 for each card.');
-      return;
+document.addEventListener('DOMContentLoaded', () => {
+    let playerCards = [];
+    let dealerCards = [];
+  
+    const playerCard1 = document.getElementById('player-card1');
+    const playerCard2 = document.getElementById('player-card2');
+    const dealerCard1 = document.getElementById('dealer-card1');
+    const playerCard3 = document.getElementById('player-card3');
+    const dealButton = document.getElementById('deal-button');
+    const hitButton = document.getElementById('hit-button');
+    const standButton = document.getElementById('stand-button');
+    const hitStandDiv = document.getElementById('hit-stand');
+    const playerHandDiv = document.getElementById('player-hand');
+  
+    let playerTurn = false;
+    let gameStarted = false;
+  
+    const disableInput = (input) => {
+      input.disabled = true;
     }
   
-    // Prikazivanje sekcije za dealerove karte
-    document.getElementById('dealer-cards').style.display = 'block';
-    document.getElementById('deal-button').style.display = 'none';
-    
-    // Enable "Hit" and "Stand" buttons
-    document.getElementById('action-container').style.display = 'block';
+    const enableInput = (input) => {
+      input.disabled = false;
+    }
   
-    // Funkcija za "Hit"
-    document.getElementById('player-hit').addEventListener('click', function () {
-      let playerHitCard = parseInt(prompt('Enter a new card for player (1-11):'));
-      if (playerHitCard < 1 || playerHitCard > 11) {
-        alert('Invalid card value. Please enter a valid card.');
-        return;
+    const updatePlayerHand = (cardValue) => {
+      playerCards.push(cardValue);
+      if (playerCards.length >= 2) {
+        enableInput(dealerCard1);
+        playerCard3.disabled = false;
       }
+    }
   
-      playerCard1 += playerHitCard; // Dodajemo novu kartu
-  
-      // Provera da li je player busta
-      if (playerCard1 > 21) {
-        document.getElementById('result').innerText = 'Player Busted!';
-        return;
+    const checkBust = () => {
+      const playerTotal = playerCards.reduce((acc, card) => acc + card, 0);
+      if (playerTotal > 21) {
+        alert('Player Busted!');
+        return true;
       }
+      return false;
+    }
   
-      alert(`Player's new total: ${playerCard1}`);
+    // Function to handle the 'Deal' button
+    dealButton.addEventListener('click', () => {
+      if (playerCard1.value && playerCard2.value) {
+        playerCards = [parseInt(playerCard1.value), parseInt(playerCard2.value)];
+        dealerCards = [parseInt(dealerCard1.value)];
+        hitStandDiv.style.display = 'block';
+        gameStarted = true;
+      }
     });
   
-    // Funkcija za "Stand"
-    document.getElementById('player-stand').addEventListener('click', function () {
-      // Prikazivanje unosa za dealerov broj
-      document.getElementById('dealer-action').style.display = 'block';
+    hitButton.addEventListener('click', () => {
+      playerCard3.disabled = false;
+      if (playerCard3.value) {
+        updatePlayerHand(parseInt(playerCard3.value));
+        checkBust();
+      }
     });
-  });
   
-  document.getElementById('submit-dealer-result').addEventListener('click', function () {
-    let playerCard1 = parseInt(document.getElementById('player-card1').value);
-    let dealerTotal = parseInt(document.getElementById('dealer-result').value);
-  
-    // Validacija dealerovog broja
-    if (dealerTotal < 1 || dealerTotal > 21) {
-      alert('Dealer total must be between 1 and 21');
-      return;
-    }
-  
-    // Provera ko je pobedio
-    if (dealerTotal > 21) {
-      document.getElementById('result').innerText = 'Dealer Busted! Player Wins!';
-    } else if (dealerTotal > playerCard1) {
-      document.getElementById('result').innerText = 'Dealer Wins!';
-    } else if (dealerTotal < playerCard1) {
-      document.getElementById('result').innerText = 'Player Wins!';
-    } else {
-      document.getElementById('result').innerText = 'It\'s a tie!';
-    }
+    standButton.addEventListener('click', () => {
+      alert('Player chose to stand!');
+      // Now prompt for dealer's hand and calculate the winner
+      let dealerTotal = dealerCards.reduce((acc, card) => acc + card, 0);
+      while (dealerTotal < 17) {
+        let newCard = prompt("Dealer needs to hit! Enter card (1-11):");
+        dealerCards.push(parseInt(newCard));
+        dealerTotal = dealerCards.reduce((acc, card) => acc + card, 0);
+      }
+      // Show the final result
+      if (dealerTotal > 21) {
+        alert('Dealer Busted! Player Wins!');
+      } else {
+        if (dealerTotal > playerCards.reduce((acc, card) => acc + card, 0)) {
+          alert('Dealer Wins!');
+        } else {
+          alert('Player Wins!');
+        }
+      }
+    });
   });
   
