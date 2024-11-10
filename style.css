@@ -94,3 +94,8 @@ td {
     padding: 8px; /* Manji razmak unutar tabele */
   }
 }
+
+body {
+  overflow: hidden;
+  touch-action: none;  /* Sprečava skrolovanje na dodirnim uređajima */
+}
